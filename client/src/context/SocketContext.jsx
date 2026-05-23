@@ -1,5 +1,18 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
+export const SocketProvider = ({ children }) => {
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    // 1. ADD THIS LOG TO VERIFY THE URL
+    console.log("ATTEMPTING TO CONNECT TO:", import.meta.env.VITE_SOCKET_URL);
+
+    const newSocket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000', {
+      withCredentials: true,
+      transports: ['websocket'] 
+    });
+    
+    // ... rest of the code
 
 const SocketContext = createContext();
 
