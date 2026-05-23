@@ -23,7 +23,11 @@ const io = new Server(server, {
 });
 
 // Standard Express Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:5173', // Must match your Vite URL exactly
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
 app.use(express.json());
 
 // Mount the REST API routes
