@@ -19,7 +19,7 @@ const App = () => {
             <div className="max-w-3xl mx-auto flex items-center justify-center">
               <a href="/" className="hover:opacity-80 transition-opacity">
                 <h1 className="text-3xl font-extrabold text-blue-600 tracking-tight">
-                  🍕 Where Should We Eat?
+                  Poller
                 </h1>
               </a>
             </div>
