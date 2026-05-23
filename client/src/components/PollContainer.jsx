@@ -33,7 +33,8 @@ const PollContainer = () => {
 
   useEffect(() => {
     // 2. Set up Socket listeners
-    if (socket && poll) {
+    // We only need the socket and the URL ID to set this up.
+    if (socket) {
       socket.emit('joinPoll', id);
 
       socket.on('pollUpdated', (updatedPoll) => {
@@ -41,10 +42,10 @@ const PollContainer = () => {
       });
 
       return () => {
-        socket.off('pollUpdated');
+        socket.off('pollUpdated'); // Clean up when leaving the page
       };
     }
-  }, [socket, id, poll]);
+  }, [socket, id]); // <-- REMOVED `poll` FROM THIS ARRAY!
 
   if (loading) return <div className="text-center mt-10">Loading poll...</div>;
   if (error) return <div className="text-center mt-10 text-red-500 font-bold">{error}</div>;
