@@ -15,20 +15,29 @@ const app = express();
 const server = http.createServer(app);
 
 // Configure Socket.io with CORS settings to allow your Vite frontend to connect
+// 1. Configure Socket.io
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173', 
+    // Hardcode your Vercel URL here in an array to guarantee it matches
+    origin: [
+      'http://localhost:5173', 
+      'https://poller-client.vercel.app' // <-- Make sure there is NO trailing slash here!
+    ], 
     methods: ['GET', 'POST'],
     credentials: true 
   }
 });
 
-// Standard Express Middleware
+// 2. Standard Express Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173', 
+  origin: [
+    'http://localhost:5173', 
+    'https://poller-client.vercel.app' // <-- Hardcode here too!
+  ], 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
+
 app.use(express.json());
 
 // Mount the REST API routes
