@@ -5,7 +5,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import pollRoutes from './routes/pollRoutes.js';
-import Poll from './models/Poll.js'; // Needed here for the socket voting logic
+import Poll from './models/Poll.js'; 
 
 // Initialize environment variables and connect to the database
 dotenv.config();
@@ -19,13 +19,13 @@ const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL || 'http://localhost:5173', 
     methods: ['GET', 'POST'],
-    credentials: true // <-- Make sure this is here!
+    credentials: true 
   }
 });
 
 // Standard Express Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173', // Must match your Vite URL exactly
+  origin: process.env.CLIENT_URL || 'http://localhost:5173', 
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
@@ -47,6 +47,8 @@ io.on('connection', (socket) => {
   // 2. Handle the real-time voting event
   socket.on('castVote', async ({ pollId, restaurantName, voterName }) => {
     try {
+      console.log(`Received vote for ${restaurantName} from ${voterName}`); // Debugging log
+      
       const poll = await Poll.findById(pollId);
       if (!poll) return;
 
@@ -62,6 +64,10 @@ io.on('connection', (socket) => {
       
       if (selectedOption) {
         selectedOption.votes.push(voterName);
+        
+        // --- THE CRITICAL FIX ---
+        // Explicitly tell Mongoose that the nested array has been modified
+        poll.markModified('options'); 
         
         // Save the updated state to MongoDB
         const updatedPoll = await poll.save();
