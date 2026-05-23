@@ -17,8 +17,9 @@ const server = http.createServer(app);
 // Configure Socket.io with CORS settings to allow your Vite frontend to connect
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173', // Default Vite port
-    methods: ['GET', 'POST']
+    origin: process.env.CLIENT_URL || 'http://localhost:5173', 
+    methods: ['GET', 'POST'],
+    credentials: true // <-- Make sure this is here!
   }
 });
 
