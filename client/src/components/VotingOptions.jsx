@@ -2,15 +2,23 @@ import React from 'react';
 
 const VotingOptions = ({ poll, currentUser, socket }) => {
   
-  const handleVote = (restaurantName) => {
-    if (socket) {
-      socket.emit('castVote', {
-        pollId: poll._id,
-        restaurantName,
-        voterName: currentUser
-      });
-    }
-  };
+ const handleVote = (restaurantName) => {
+  console.log("1. Click registered for:", restaurantName);
+  console.log("2. Voter Name is:", currentUser);
+  console.log("3. Poll ID is:", poll._id);
+  console.log("4. Is Socket connected?", socket ? socket.connected : false);
+
+  if (socket) {
+    socket.emit('castVote', {
+      pollId: poll._id,
+      restaurantName,
+      voterName: currentUser
+    });
+    console.log("5. Emission sent to backend!");
+  } else {
+    console.warn("SOCKET IS NULL OR UNDEFINED");
+  }
+};
 
   // Helper to check if the current user voted for a specific option
   const hasVotedFor = (option) => option.votes.includes(currentUser);
